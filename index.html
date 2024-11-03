@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<style>
+    body {
+        background-color: rgb(25, 25, 25);
+        color: white;
+        font-family: Arial;
+    }
+
+    .title{
+        font-size: 30px;
+        font-weight: bold;
+    }
+    .move-icon {
+        height: 50px;
+    }
+
+    .move-button {
+        background-color: transparent;
+        border: 3px solid white;
+        width: 120px;
+        height: 120px;
+        border-radius: 60px;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+.result {
+font-size : 25px;
+font-weight: bold;
+margin-top: 50px;
+}
+.score {
+    margin-top: 60px;
+}
+
+.reset-score-button{
+     background-color: white;
+     border: none;
+     font-size: 15px;
+     padding: 8px 15px;
+     cursor: pointer;
+}
+</style>
+    </head>
+
+    <body>
+          <p class="title">Rock Paper Scissor</p>
+
+          <button onclick="
+         
+        play('ROCK');
+
+          " class="move-button"><img src="ROCK-emoji.png" class="move-icon"></button>
+
+          <button onclick="
+         
+       play('PAPER');
+          
+          " class="move-button"><img src="PAPER-emoji.png" class="move-icon"></button>
+
+          <button onclick="
+       play('SCISSOR');
+
+          "
+          class="move-button"><img src="SCISSOR-emoji.png" class="move-icon"></button>
+
+          <p class="js-result result"></p>
+          <p class="js-moves"></p>
+<p class="js-score score"></p>
+           
+<button onclick="
+score.WINS = 0;
+score.LOSSES = 0;
+score.TIES = 0;
+localStorage.removeItem('score');
+updateScoreElement();
+" class="reset-score-button">Reset Score</button>
+
+        <script>
+
+const score = JSON.parse(localStorage.getItem('score')) || { WINS: 0, LOSSES: 0, TIES: 0 };
+
+updateScoreElement();
+
+function play(playerMove){
+    const computerMove = pickComputerMove();         
+
+    let result = '';
+
+    if(playerMove === 'ROCK'){
+        if(computerMove === 'ROCK'){result = 'TIED';}
+         else if(computerMove === 'PAPER'){result = 'LOST';}
+         else if(computerMove === 'SCISSOR'){result = 'WON'}
+    }
+    else if(playerMove === 'PAPER'){
+        if(computerMove === 'ROCK'){result = 'WON';}
+         else if(computerMove === 'PAPER'){result = 'TIED';}
+         else if(computerMove === 'SCISSOR'){result = 'LOST'}
+    }
+    else if(playerMove === 'SCISSOR'){
+        if(computerMove === 'ROCK'){result = 'LOST';}
+         else if(computerMove === 'PAPER'){result = 'WON';}
+         else if(computerMove === 'SCISSOR'){result = 'TIED'}
+    }
+
+    if(result === 'WON'){score.WINS += 1;}
+    else if(result === 'LOST'){score.LOSSES += 1;}
+    else if(result === 'TIED'){score.TIES += 1;}
+
+    localStorage.setItem('score', JSON.stringify(score));
+
+updateScoreElement();
+
+   document.querySelector('.js-result').innerHTML = result;
+   document.querySelector('.js-moves').innerHTML = `You <img src="${playerMove}-emoji.png" class="move-icon">  <img src="${computerMove}-emoji.png" class="move-icon">Computer`;
+
+}
+
+function updateScoreElement() {
+    document.querySelector('.js-score')
+.innerHTML = `    Wins : ${score.WINS}, Losses: ${score.LOSSES}, TIES: ${score.TIES}
+`
+;
+}
+
+
+            function pickComputerMove(){
+
+                const randomNumber = Math.random();
+                let computerMove = '';
+
+if(randomNumber >= 0 && randomNumber < 1/3){computerMove = 'ROCK';}
+else if(randomNumber >= 1/3 && randomNumber < 2/3){computerMove = 'PAPER';}
+else if(randomNumber >= 2/3 && randomNumber <1){computerMove = 'SCISSOR';}
+return computerMove;
+            }
+
+        </script>
+    </body>
+</html>
